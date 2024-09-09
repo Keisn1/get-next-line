@@ -1,0 +1,60 @@
+#+title: Readme
+
+* static variables
+** what are static variables in c?
+
+In C, static variables are variables that maintain their value between function calls and have a scope that is either limited to the file or the block in which they are declared. They are declared using the =static= keyword. There are two primary contexts in which static variables can be used:
+
+1. *Static Local Variables*:
+   - Declared inside a function.
+   - Retain their value between function calls.
+   - Scope is limited to the function in which they are declared.
+
+   #+begin_src c
+   #include <stdio.h>
+
+   void counter() {
+       static int count = 0;  // Static local variable
+       count++;
+       printf("Count: %d\n", count);
+   }
+
+   int main() {
+       counter();  // Output: Count: 1
+       counter();  // Output: Count: 2
+       counter();  // Output: Count: 3
+       return 0;
+   }
+   #+end_src
+
+2. *Static Global Variables*:
+   - Declared outside of all functions, typically at the top of a file.
+   - Accessible only within the file where they are declared.
+   - Can be used to restrict the visibility of a variable to the file scope, which is useful for creating private data that should not be accessible from other files.
+
+   #+begin_src c
+// File1.c
+static int counter = 0;  // Static global variable
+void incrementCounter() {
+	counter++;
+}
+int getCounter() {
+	return counter;
+}
+   #+end_src
+   #+begin_src c
+// File2.c
+#include <stdio.h>
+
+extern void incrementCounter();
+extern int getCounter();
+
+int main() {
+	incrementCounter();
+	incrementCounter();
+	printf("Counter: %d\n", getCounter());  // Output: Counter: 2
+	return 0;
+}
+   #+end_src
+
+   In summary, static variables in C help manage data persistence and visibility, making them useful for stateful operations within functions or for restricting global variable access to a single file.
