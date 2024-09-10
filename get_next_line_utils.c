@@ -38,3 +38,67 @@ char	*ft_strdup(const char *s)
 	*res = '\0';
 	return (res_o);
 }
+
+char	*ft_get_empty_str(size_t n)
+{
+	char	*ret;
+
+	ret = (char *)malloc(n);
+	if (ret == NULL || n == 0)
+		return (NULL);
+	*ret = '\0';
+	return (ret);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	count;
+
+	if (size == 0)
+		return (ft_strlen(src));
+	count = 0;
+	while (src[count] != '\0' && (count < size - 1))
+	{
+		dst[count] = src[count];
+		count++;
+	}
+	dst[count] = '\0';
+	return (ft_strlen(src));
+}
+
+/*
+   Appends src to string dst of size siz (unlike strncat, siz is the
+   full size of dst, not space left).  At most siz-1 characters
+   will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
+   Returns strlen(src) + MIN(siz, strlen(initial dst)).
+   If retval >= siz, truncation occurred.
+*/
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	char		*d;
+	const char	*s;
+	size_t		dlen;
+	size_t		n;
+
+	n = size;
+	d = dst;
+	while (*d && n-- != 0)
+		d++;
+	dlen = d - dst;
+	n = size - dlen;
+	if (n == 0)
+		return (ft_strlen(src) + dlen);
+	s = src;
+	while (*s)
+	{
+		if (n != 1)
+		{
+			*d++ = *s;
+			n--;
+		}
+		s++;
+	}
+	*d = '\0';
+	return (dlen + (s - src));
+}

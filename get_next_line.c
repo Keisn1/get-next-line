@@ -11,30 +11,47 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+
+char	*add_to_return(char buf[BUFFER_SIZE], int bytes_read)
+{
+	static char	*ret = "";
+	char		*new;
+	int			size;
+	int			count1;
+	int			count2;
+
+	size = ft_strlen(ret) + bytes_read + 1;
+	new = ft_get_empty_str(size);
+	ft_strlcat(new, ret, size);
+	count1 = 0;
+	count2 = ft_strlen(ret);
+	while (count1 < bytes_read)
+	{
+		new[count2] = buf[count1];
+		count1++;
+		count2++;
+	}
+	new[count2] = '\0';
+	if (ft_strlen(ret) > 0)
+		free(ret);
+	ret = new;
+	return (ret);
+}
 
 char	*get_next_line(int fd)
 {
 	char	buffer[BUFFER_SIZE];
-	char	*cur;
-	char	*line;
+	int		bytes_read;
+	char	*ret;
 
-	cur = buffer;
-	while (read(fd, cur, 1) == 1)
+	ret = NULL;
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	while (bytes_read > 0)
 	{
-		if (*cur == '\n')
-		{
-			*cur = '\0';
-			line = ft_strdup(buffer);
-			return (line);
-		}
-		cur++;
+		ret = add_to_return(buffer, bytes_read);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-	*cur = '\0';
-	line = ft_strdup(buffer);
-	if (ft_strlen(line) == 0)
-	{
-		free(line);
-		return (NULL);
-	}
-	return (line);
+
+	return (ret);
 }

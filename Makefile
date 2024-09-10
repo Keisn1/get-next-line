@@ -7,7 +7,7 @@
 CC := cc
 CFLAGS := -Wall -Werror -Wextra
 BUFFER_FLAG = -D BUFFER_SIZE=
-BUFFER_SIZE = 64
+BUFFER_SIZE = 16
 
 CXX := g++
 CXX_FLAGS := -Wall -Werror -Wextra

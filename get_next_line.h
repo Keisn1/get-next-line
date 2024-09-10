@@ -28,6 +28,9 @@ extern "C"
 char* get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
+char	*ft_get_empty_str(size_t n);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
 
 # ifdef __cplusplus
 }
