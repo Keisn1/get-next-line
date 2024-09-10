@@ -21,7 +21,11 @@ int	get_next_line(int fd, char **line)
 	while (read(fd, cur, 1) == 1)
 	{
 		if (*cur == '\n')
-			break ;
+		{
+			*cur = '\0';
+			*line = ft_strdup(buffer);
+			return (1);
+		}
 		cur++;
 	}
 	*cur = '\0';
