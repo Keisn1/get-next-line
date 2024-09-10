@@ -17,29 +17,21 @@ char	*add_to_return(char buf[BUFFER_SIZE], int bytes_read, bool first_read)
 	static char	*ret = NULL;
 	char		*new;
 	int			size;
-	int			count1;
-	int			count2;
+	int			size_ret;
 
 	if (first_read) {
 		if (ret)
 			free(ret);
 		ret = NULL;
 	}
-	count1 = 0;
-	count2 = 0;
+	size_ret = 0;
 	if (ret)
-		count2 = ft_strlen(ret);
-	size = count2 + bytes_read + 1;
+		size_ret = ft_strlen(ret);
+	size = size_ret + bytes_read + 1;
 	new = ft_get_empty_str(size);
-	if (ret)
-		ft_strlcat(new, ret, size);
-	while (count1 < bytes_read)
-	{
-		new[count2] = buf[count1];
-		count1++;
-		count2++;
-	}
-	new[count2] = '\0';
+	ft_memcpy(new, ret, size_ret);
+	ft_memcpy(new+size_ret, buf, bytes_read);
+	new[size_ret+bytes_read] = '\0';
 	if (ret)
 		free(ret);
 	ret = new;

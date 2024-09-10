@@ -102,3 +102,22 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	*d = '\0';
 	return (dlen + (s - src));
 }
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char	*d;
+	unsigned char	*s;
+	size_t			idx;
+
+	if (!dest && !src)
+		return (dest);
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
+	idx = 0;
+	while (idx < n)
+	{
+		d[idx] = s[idx];
+		idx++;
+	}
+	return (dest);
+}
