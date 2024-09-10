@@ -11,25 +11,20 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <string.h>
-#include <stdio.h>
-
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 32
-#endif
 
 int	get_next_line(int fd, char **line)
 {
-	char buffer[BUFFER_SIZE];
-	char* cur = buffer;
+	char	buffer[BUFFER_SIZE];
+	char	*cur;
 
-    while (read(fd, cur, 1) == 1) {
+	cur = buffer;
+	while (read(fd, cur, 1) == 1)
+	{
 		if (*cur == '\n')
-			break;
+			break ;
 		cur++;
-    }
+	}
 	*cur = '\0';
-	printf("%d", BUFFER_SIZE);
-	*line = strdup(buffer);
+	*line = ft_strdup(buffer);
 	return (0);
 }
