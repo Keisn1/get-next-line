@@ -18,18 +18,24 @@ OBJ_DIR := .
 SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES := $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
+TEST_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 TEST_TARGET := run_test
 
-all: $(OBJ_FILES)
+NAME := your_echo
 
-$(TEST_TARGET): $(OBJ_FILES) test.cpp
-	$(CXX) $(FSANITIZE) -o run_test test.cpp $(OBJ_FILES) $(LDFLAGS)
+all: $(NAME)
+
+$(NAME): $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_FILES)
+
+$(TEST_TARGET): $(OBJ_FILES) $(TEST_FILES)
+	$(CXX) $(FSANITIZE) -o run_test $(TEST_FILES) $(OBJ_FILES) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJ_FILES)
+	rm -f $(TEST_TARGET)
 
 fclean: clean
-	rm -f $(TEST_TARGET)
 
 re: fclean all
 
@@ -41,7 +47,7 @@ bear:
 norm:
 	norminette -R CheckForbiddenSourceHeader -R CheckDefine
 
-.PHONY: norm clean
+.PHONY: norm clean test
 
 print_src_files:
 	@echo $(SRC_FILES)
