@@ -5,7 +5,9 @@
 # @version 0.1
 
 CC := cc
-CFLAGS := -Wall -Werror -Wextra -D BUFFER_SIZE=64
+CFLAGS := -Wall -Werror -Wextra
+BUFFER_FLAG = -D BUFFER_SIZE=
+BUFFER_SIZE = 64
 
 CXX := g++
 CXX_FLAGS := -Wall -Werror -Wextra
@@ -26,7 +28,10 @@ NAME := your_echo
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $(NAME) ./example/main.c $(OBJ_FILES)
+	$(CC) $(CFLAGS) $(BUFFER_FLAG)$(BUFFER_SIZE) -o $(NAME) ./example/main.c $(OBJ_FILES)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) $(BUFFER_FLAG)$(BUFFER_SIZE) -c $(SRC_FILES)
 
 $(TEST_TARGET): $(OBJ_FILES) $(TEST_FILES)
 	$(CXX) $(FSANITIZE) -o run_test $(TEST_FILES) $(OBJ_FILES) $(LDFLAGS)
@@ -40,7 +45,7 @@ fclean: clean
 
 re: fclean all
 
-test: $(TEST_TARGET)
+test: fclean $(TEST_TARGET)
 	- ./run_test
 
 bear:
