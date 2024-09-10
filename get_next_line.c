@@ -12,10 +12,11 @@
 
 #include "get_next_line.h"
 
-int	get_next_line(int fd, char **line)
+char	*get_next_line(int fd)
 {
 	char	buffer[BUFFER_SIZE];
 	char	*cur;
+	char	*line;
 
 	cur = buffer;
 	while (read(fd, cur, 1) == 1)
@@ -23,12 +24,17 @@ int	get_next_line(int fd, char **line)
 		if (*cur == '\n')
 		{
 			*cur = '\0';
-			*line = ft_strdup(buffer);
-			return (1);
+			line = ft_strdup(buffer);
+			return (line);
 		}
 		cur++;
 	}
 	*cur = '\0';
-	*line = ft_strdup(buffer);
-	return (0);
+	line = ft_strdup(buffer);
+	if (ft_strlen(line) == 0)
+	{
+		free(line);
+		return (NULL);
+	}
+	return (line);
 }

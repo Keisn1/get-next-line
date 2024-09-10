@@ -26,7 +26,7 @@ NAME := your_echo
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o $(NAME) ./example/main.c $(OBJ_FILES)
 
 $(TEST_TARGET): $(OBJ_FILES) $(TEST_FILES)
 	$(CXX) $(FSANITIZE) -o run_test $(TEST_FILES) $(OBJ_FILES) $(LDFLAGS)
@@ -37,7 +37,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-
 
 re: fclean all
 

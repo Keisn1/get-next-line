@@ -25,7 +25,7 @@ extern "C"
 {
 # endif
 
-int get_next_line(int fd, char **line);
+char* get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 
