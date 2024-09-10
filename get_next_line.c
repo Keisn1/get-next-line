@@ -13,19 +13,18 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*add_to_return(char buf[BUFFER_SIZE], int bytes_read, bool first_read)
+char	*add_to_return(char buf[BUFFER_SIZE], int bytes_read, bool new_file)
 {
 	static char	*stash = NULL;
 	char		*new;
-	int			size;
+	int			size_new;
 	int			size_stash;
 	int			count;
+	bool found_newline;
 
-	if (first_read)
+	if (new_file)
 	{
-		/* printf("\n\n here: %s \n\n", stash); */
-		if (stash)
-			free(stash);
+		free(stash);
 		stash = NULL;
 	}
 	size_stash = 0;
@@ -33,52 +32,68 @@ char	*add_to_return(char buf[BUFFER_SIZE], int bytes_read, bool first_read)
 		size_stash = ft_strlen(stash);
 	count = 0;
 	while (count < bytes_read && buf[count] != '\n')
-	{
+		count++;
+
+	found_newline = false;
+	if (count < bytes_read) {
+		found_newline = true;
 		count++;
 	}
-	if (buf[count] == '\n')
-		count++;
-	size = size_stash + count + 1;
-	/* size = size_ret + bytes_read + 1; */
-	new = ft_get_empty_str(size);
+
+	size_new = size_stash + count + 1;
+	new = ft_get_empty_str(size_new);
 	ft_memcpy(new, stash, size_stash);
 	ft_memcpy(new + size_stash, buf, count);
-	/* ft_memcpy(new+size_ret, buf, bytes_read); */
 	new[size_stash + count] = '\0';
-	/* new[size_ret+bytes_read] = '\0'; */
+
 	if (stash)
 		free(stash);
-	if (count == BUFFER_SIZE)
+
+	/* if (count == BUFFER_SIZE) */
+	/* if (count == bytes_read) */
+	if (!found_newline)
 	{
-		stash = ft_get_empty_str(ft_strlen(new));
-		ft_memcpy(stash, new, ft_strlen(new));
+		stash = ft_get_empty_str(ft_strlen(new)+1);
+		ft_memcpy(stash, new, ft_strlen(new)+1);
 	}
 	else
 	{
-		stash = ft_get_empty_str(BUFFER_SIZE - count);
+		/* printf("count: %d\n", count); */
+		/* printf("buffer[count]: %c\n", buf[count]); */
+		stash = ft_get_empty_str(BUFFER_SIZE - count + 1);
 		ft_memcpy(stash, buf + count, BUFFER_SIZE - count);
+		stash[BUFFER_SIZE - count] = '\0';
+		/* printf("stash: %s\n", stash); */
 	}
+
 	return (new);
 }
 
 char	*get_next_line(int fd)
 {
+	static int old_fd = -1;
 	char	buffer[BUFFER_SIZE];
 	int		bytes_read;
 	char	*ret;
-	bool	first_read;
+	bool	new_file;
+
+
+	new_file = false;
+	if (fd != old_fd)
+		new_file = true;
+	old_fd = fd;
 
 	ret = NULL;
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	first_read = true;
 	while (bytes_read > 0)
 	{
 		if (ret)
 			free(ret);
-		ret = add_to_return(buffer, bytes_read, first_read);
-		first_read = false;
+		ret = add_to_return(buffer, bytes_read, new_file);
+		/* printf("here: %s\n", ret); */
 		if (ret[ft_strlen(ret) - 1] == '\n')
-			break ;
+			break;
+		new_file = false;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
 
