@@ -18,8 +18,9 @@ INSTANTIATE_TEST_SUITE_P(
 	testing::Values(
 		// ReadingFileTestParams{"./test_files/6", std::vector<std::string>{""}},
 		// ReadingFileTestParams{"./test_files/5", std::vector<std::string>{"line one", "line two with newline", ""}},
-		// ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one", "line two wo newline"}},
-		ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n", ""}, 2},
+		// ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
+		ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
+		ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
 		ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
 		ReadingFileTestParams{"./test_files/1", std::vector<std::string>{"a line"}, 1},
 		ReadingFileTestParams{"./test_files/0", std::vector<std::string>{}, 0}
@@ -43,6 +44,7 @@ TEST_P(ReadingFileTest, VariousContents) {
 	while (got) {
 		std::string want_str = want_strs[i];
 		EXPECT_STREQ(want_str.c_str(), got);
+		free(got);
 		got = get_next_line(fd);
 		i++;
 		got_times_loop++;
