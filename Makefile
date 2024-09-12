@@ -28,10 +28,10 @@ NAME := your_echo
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	$(CC) $(CFLAGS) $(BUFFER_FLAG)$(BUFFER_SIZE) -o $(NAME) ./example/main.c $(OBJ_FILES)
+	$(CC) -g $(CFLAGS) $(FSANITIZE) $(BUFFER_FLAG)$(BUFFER_SIZE) -o $(NAME) ./example/main.c $(OBJ_FILES)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) $(BUFFER_FLAG)$(BUFFER_SIZE) -c $(SRC_FILES)
+	$(CC) -g $(CFLAGS) $(BUFFER_FLAG)$(BUFFER_SIZE) -c $(SRC_FILES)
 
 $(TEST_TARGET): $(OBJ_FILES) $(TEST_FILES)
 	$(CXX) $(FSANITIZE) -o run_test $(TEST_FILES) $(OBJ_FILES) $(LDFLAGS)

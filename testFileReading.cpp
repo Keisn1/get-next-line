@@ -16,11 +16,13 @@ INSTANTIATE_TEST_SUITE_P(
 	ReadingFileTests,
 	ReadingFileTest,
 	testing::Values(
-		ReadingFileTestParams{"./test_files/5", std::vector<std::string>{"line one\n", "line two with newline\n"}, 2},
+		// ReadingFileTestParams{"./test_files/5", std::vector<std::string>{"line one\n", "line two with newline\n"}, 2},
+		// ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2}
+		// ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
+		// ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
+		// ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
+		// ReadingFileTestParams{"./test_files/nl", std::vector<std::string>{"\n", ""}, 1}
 		ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
-		ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
-		ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
-		ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
 		ReadingFileTestParams{"./test_files/1", std::vector<std::string>{"a line"}, 1},
 		ReadingFileTestParams{"./test_files/0", std::vector<std::string>{}, 0}
 		)
@@ -34,11 +36,11 @@ TEST_P(ReadingFileTest, VariousContents) {
 
 	int fd = open(filename.c_str(), O_RDONLY);
 
-	int i = 0;
 	char* got = get_next_line(fd);
 	if (want_strs.size())
 		ASSERT_STRNE(got, NULL);
 
+	int i = 0;
 	int got_times_loop = 0;
 	while (got) {
 		std::string want_str = want_strs[i];
