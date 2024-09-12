@@ -12,29 +12,113 @@
 
 #include "get_next_line.h"
 
+char	*crud_stash(t_op op, char *new_stash)
+{
+	static char	*stash = NULL;
+	char		*tmp;
+
+	if (op == SET_STASH)
+	{
+		free(stash);
+		stash = ft_strdup(new_stash);
+	}
+	if (op == DELETE_STASH)
+	{
+		free(stash);
+		stash = NULL;
+	}
+	if (op == UPDATE_STASH)
+	{
+		tmp = ft_strjoin(stash, new_stash);
+		free(stash);
+		stash = tmp;
+	}
+	if (op == GET_STASH)
+		if (stash)
+			return (ft_strdup(stash));
+	return (NULL);
+}
+
+bool	check_newline_buf_str(char *buf_str)
+{
+	size_t	count;
+
+	if (!buf_str)
+		return (false);
+	count = 0;
+	while (count < ft_strlen(buf_str))
+	{
+		if (buf_str[count] == '\n')
+			return (true);
+		count++;
+	}
+	return (false);
+}
+
+char	*check_newline_and_update(void)
+{
+	char	*stash;
+	size_t	count;
+	char	*ret;
+
+	stash = crud_stash(GET_STASH, "");
+	count = 0;
+	if (!stash)
+		return (stash);
+	while (count < ft_strlen(stash))
+	{
+		if (stash[count++] == '\n')
+		{
+			if (count == ft_strlen(stash))
+				crud_stash(DELETE_STASH, "");
+			else
+				crud_stash(SET_STASH, stash + count);
+			ret = ft_get_empty_str(count + 1);
+			ft_memcpy(ret, stash, count);
+			ret[count] = '\0';
+			free(stash);
+			return (ret);
+		}
+	}
+	crud_stash(DELETE_STASH, "");
+	return (stash);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	count;
+
+	count = 0;
+	while (s[count])
+		count++;
+	return (count);
+}
+
 char	*get_next_line(int fd)
 {
-	char	buffer[BUFFER_SIZE];
-	char	*cur;
-	char	*line;
+	char		*buffer;
+	long int	bytes_read;
+	char		*ret;
 
-	cur = buffer;
-	while (read(fd, cur, 1) == 1)
-	{
-		if (*cur == '\n')
-		{
-			*cur = '\0';
-			line = ft_strdup(buffer);
-			return (line);
-		}
-		cur++;
-	}
-	*cur = '\0';
-	line = ft_strdup(buffer);
-	if (ft_strlen(line) == 0)
-	{
-		free(line);
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	if (!buffer)
 		return (NULL);
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	while (bytes_read > 0)
+	{
+		buffer[bytes_read] = '\0';
+		crud_stash(UPDATE_STASH, buffer);
+		if (check_newline_buf_str(buffer))
+			break ;
+		free(buffer);
+		buffer = (char *)malloc(BUFFER_SIZE + 1);
+		if (!buffer)
+			return (NULL);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-	return (line);
+	free(buffer);
+	if (bytes_read < 0)
+		return (crud_stash(DELETE_STASH, ""));
+	ret = check_newline_and_update();
+	return (ret);
 }
