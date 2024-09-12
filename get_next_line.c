@@ -74,18 +74,17 @@ char* check_newline_and_update() {
 	if (!stash)
 		return stash;
 	while (count < ft_strlen(stash)) {
-		if (stash[count] == '\n') {
+		if (stash[count++] == '\n') {
 			if (count == ft_strlen(stash))
 				crud_stash(DELETE_STASH, "");
 			else
-				crud_stash(SET_STASH, stash+count+1);
-			char* ret = ft_get_empty_str(count+2);
-			ft_memcpy(ret, stash, count+1);
-			ret[count+1] = '\0';
+				crud_stash(SET_STASH, stash+count);
+			char* ret = ft_get_empty_str(count+1);
+			ft_memcpy(ret, stash, count);
+			ret[count] = '\0';
 			free(stash);
 			return ret;
 		}
-		count++;
 	}
 	crud_stash(DELETE_STASH, "");
 	return stash;
@@ -99,15 +98,19 @@ char	*get_next_line(int fd)
 	char	*buf_string;
 
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read)
+	while (bytes_read > 0)
 	{
 		buf_string = buffer_to_string(buffer, bytes_read);
+		if (!buf_string)
+			return NULL;
 		crud_stash(UPDATE_STASH, buf_string);
 		free(buf_string);
 		if (check_newline())
 			break;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
+	if (bytes_read < 0)
+		return NULL;
 	ret = check_newline_and_update();
 	return (ret);
 }
