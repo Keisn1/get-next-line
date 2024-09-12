@@ -20,7 +20,7 @@ INSTANTIATE_TEST_SUITE_P(
 		// ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2}
 		// ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
 		// ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
-		// ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
+		ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
 		ReadingFileTestParams{"./test_files/nl", std::vector<std::string>{"\n", ""}, 1},
 		ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
 		ReadingFileTestParams{"./test_files/1", std::vector<std::string>{"a line"}, 1},

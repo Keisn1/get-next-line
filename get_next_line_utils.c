@@ -12,16 +12,6 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	count;
-
-	count = 0;
-	while (s[count])
-		count++;
-	return (count);
-}
-
 char	*ft_strdup(const char *s)
 {
 	char	*res_o;
@@ -49,30 +39,6 @@ char	*ft_get_empty_str(size_t n)
 	*ret = '\0';
 	return (ret);
 }
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	count;
-
-	if (size == 0)
-		return (ft_strlen(src));
-	count = 0;
-	while (src[count] != '\0' && (count < size - 1))
-	{
-		dst[count] = src[count];
-		count++;
-	}
-	dst[count] = '\0';
-	return (ft_strlen(src));
-}
-
-/*
-   Appends src to string dst of size siz (unlike strncat, siz is the
-   full size of dst, not space left).  At most siz-1 characters
-   will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
-   Returns strlen(src) + MIN(siz, strlen(initial dst)).
-   If retval >= siz, truncation occurred.
-*/
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
@@ -122,18 +88,17 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*res;
 	size_t	size;
 
 	if (!s1 && !s2)
-		return NULL;
+		return (NULL);
 	if (!s1)
-		return ft_strdup(s2);
+		return (ft_strdup(s2));
 	if (!s2)
-		return ft_strdup(s1);
+		return (ft_strdup(s1));
 	size = ft_strlen(s1) + ft_strlen(s2) + 1;
 	res = (char *)malloc((size) * sizeof(char));
 	if (!res)
