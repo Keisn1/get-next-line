@@ -12,6 +12,18 @@
 
 #include "get_next_line.h"
 
+size_t	ft_strlen(const char *s)
+{
+	size_t	count;
+
+	if (!s)
+		return (0);
+	count = 0;
+	while (s[count])
+		count++;
+	return (count);
+}
+
 char	*crud_stash(t_op op, char *new_stash)
 {
 	static char	*stash = NULL;
@@ -41,48 +53,35 @@ char	*crud_stash(t_op op, char *new_stash)
 
 char	*truncate_stash(void)
 {
-	char	*stash;
-	size_t	count;
+	char	*cur_stash;
 	char	*ret;
+	size_t	count;
 
-	stash = crud_stash(GET_STASH, "");
+	cur_stash = crud_stash(GET_STASH, "");
 	count = 0;
-	if (!stash)
-		return (stash);
-	while (count < ft_strlen(stash))
+	if (!cur_stash)
+		return (cur_stash);
+	while (count < ft_strlen(cur_stash))
 	{
-		if (stash[count++] == '\n')
+		if (cur_stash[count++] == '\n')
 		{
-			if (count == ft_strlen(stash))
+			ret = ft_substr(cur_stash, 0, count);
+			if (count == ft_strlen(cur_stash))
 				crud_stash(DELETE_STASH, "");
 			else
-				crud_stash(SET_STASH, stash + count);
-			ret = ft_get_empty_str(count + 1);
-			ft_memcpy(ret, stash, count);
-			ret[count] = '\0';
-			free(stash);
+				crud_stash(SET_STASH, cur_stash + count);
+			free(cur_stash);
 			return (ret);
 		}
 	}
 	crud_stash(DELETE_STASH, "");
-	return (stash);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	count;
-
-	count = 0;
-	while (s[count])
-		count++;
-	return (count);
+	return (cur_stash);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*buffer;
 	long int	bytes_read;
-	char		*ret;
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
@@ -93,13 +92,12 @@ char	*get_next_line(int fd)
 		buffer[bytes_read] = '\0';
 		crud_stash(UPDATE_STASH, buffer);
 		if (ft_strchr(buffer, '\n'))
-			break;
+			break ;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
 	buffer = NULL;
 	if (bytes_read < 0)
-		return (crud_stash(DELETE_STASH, ""));
-	ret = truncate_stash();
-	return (ret);
+		return (crud_stash(DELETE_STASH, NULL));
+	return (truncate_stash());
 }
