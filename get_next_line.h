@@ -21,6 +21,9 @@
 #  define BUFFER_SIZE 32
 # endif
 
+#  define MAX_FD 1024
+
+
 /* type definitions */
 typedef enum _OP
 {
