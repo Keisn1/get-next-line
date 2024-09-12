@@ -39,23 +39,7 @@ char	*crud_stash(t_op op, char *new_stash)
 	return (NULL);
 }
 
-bool	check_newline_buf_str(char *buf_str)
-{
-	size_t	count;
-
-	if (!buf_str)
-		return (false);
-	count = 0;
-	while (count < ft_strlen(buf_str))
-	{
-		if (buf_str[count] == '\n')
-			return (true);
-		count++;
-	}
-	return (false);
-}
-
-char	*check_newline_and_update(void)
+char	*truncate_stash(void)
 {
 	char	*stash;
 	size_t	count;
@@ -108,17 +92,14 @@ char	*get_next_line(int fd)
 	{
 		buffer[bytes_read] = '\0';
 		crud_stash(UPDATE_STASH, buffer);
-		if (check_newline_buf_str(buffer))
-			break ;
-		free(buffer);
-		buffer = (char *)malloc(BUFFER_SIZE + 1);
-		if (!buffer)
-			return (NULL);
+		if (ft_strchr(buffer, '\n'))
+			break;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
+	buffer = NULL;
 	if (bytes_read < 0)
 		return (crud_stash(DELETE_STASH, ""));
-	ret = check_newline_and_update();
+	ret = truncate_stash();
 	return (ret);
 }

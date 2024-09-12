@@ -108,3 +108,40 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_strlcat(res, s2, size);
 	return (res);
 }
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (unsigned char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((unsigned char)c == '\0')
+		return ((char *)s);
+	return (NULL);
+}
+
+/* char	*ft_substr(char const *s, unsigned int start, size_t len) */
+/* { */
+/* 	size_t	len_s; */
+/* 	size_t	count; */
+/* 	char	*new; */
+
+/* 	len_s = ft_strlen(s); */
+/* 	if (start >= len_s) */
+/* 		return (ft_get_empty_str()); */
+/* 	if ((len_s - start) < len) */
+/* 		len = len_s - start; */
+/* 	new = (char *)malloc(sizeof(char) * (len + 1)); */
+/* 	if (!new) */
+/* 		return (NULL); */
+/* 	count = 0; */
+/* 	while (count < len) */
+/* 	{ */
+/* 		new[count++] = s[start]; */
+/* 		start++; */
+/* 	} */
+/* 	new[count] = '\0'; */
+/* 	return (new); */
+/* } */
