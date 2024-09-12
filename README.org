@@ -16,6 +16,7 @@
 - [[#read][read]]
   - [[#return-value-1][return value]]
   - [[#nbr-of-bytes-smaller-then-nbr-of-bytes-requested][nbr of bytes smaller then nbr of bytes requested]]
+  - [[#buffer-size-and-count][Buffer size and count]]
 - [[#compilation][Compilation]]
   - [[#flag--d-buffer_sizexx][Flag: -D BUFFER_SIZE=xx]]
   - [[#what-is-the-d-flag][what is the D flag]]
@@ -136,6 +137,8 @@ Exclusive use flag, when used with =O_CREAT=, will cause the call to fail if the
 *** =O_TRUNC=:
 Truncate the file to zero length if it already exists
 * read
+
+=ssize_t read(int fd, void buf[.count], size_t count);=
 ** return value
 - success
   - number of bytes read is returned
@@ -148,6 +151,17 @@ Truncate the file to zero length if it already exists
 ** nbr of bytes smaller then nbr of bytes requested
 - not an error
 - maybe fewer bytes available or interrupted by signal
+** Buffer size and count
+- If count is zero, read() may detect the errors described below.
+- In  the absence  of any errors, or if read() does not check for errors, a read() with a count of 0 returns zero and has no other effects.
+- According to POSIX.1, if count is greater than SSIZE_MAX, the result is *implementation-defined*; see NOTES for the upper limit on Linux.
+- on my system, the ~ssize_type~ is defined via ~__ssize_t~, which in turn is defined as ~__SWORD_TYPE~ which is a ~long int~
+  #+begin_src c
+# define __SWORD_TYPE		long int
+#define __SSIZE_T_TYPE		__SWORD_TYPE
+__STD_TYPE __SSIZE_T_TYPE __ssize_t; /* Type of a byte count, or error.  */
+typedef __ssize_t ssize_t;
+  #+end_src
 * Compilation
 ** TODO Flag: -D BUFFER_SIZE=xx
 - used for the buffer size for the read calls

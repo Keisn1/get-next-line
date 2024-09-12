@@ -14,19 +14,21 @@
 /* 	return 0; */
 /* } */
 
+#include <limits.h>
 int main() {
-	char *line;
-	int fd = open("test_files/nl", O_RDONLY);
-	int count = 0;
-	line = get_next_line(fd);
-	printf("%d: %s\n",count, line);
-	count++;
-	while (line) {
-		free(line);
-		line = get_next_line(fd);
-		printf("%d: %s\n",count, line);
-		count++;
-	}
+	printf("size max (%lu): ", (size_t)-1);
+	/* char *line; */
+	/* int fd = open("test_files/nl", O_RDONLY); */
+	/* int count = 0; */
+	/* line = get_next_line(fd); */
+	/* printf("%d: %s\n",count, line); */
+	/* count++; */
+	/* while (line) { */
+	/* 	free(line); */
+	/* 	line = get_next_line(fd); */
+	/* 	printf("%d: %s\n",count, line); */
+	/* 	count++; */
+	/* } */
 
 	return 0;
 }
