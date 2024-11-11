@@ -13,9 +13,9 @@
       "obj/get_next_line.o",
       "src/get_next_line.c"
     ],
-    "directory": "/home/kay/workspace/get-next-line",
-    "file": "/home/kay/workspace/get-next-line/src/get_next_line.c",
-    "output": "/home/kay/workspace/get-next-line/obj/get_next_line.o"
+    "directory": "/home/kfreyer/workspace/get-next-line",
+    "file": "/home/kfreyer/workspace/get-next-line/src/get_next_line.c",
+    "output": "/home/kfreyer/workspace/get-next-line/obj/get_next_line.o"
   },
   {
     "arguments": [
@@ -31,9 +31,9 @@
       "obj/get_next_line_utils.o",
       "src/get_next_line_utils.c"
     ],
-    "directory": "/home/kay/workspace/get-next-line",
-    "file": "/home/kay/workspace/get-next-line/src/get_next_line_utils.c",
-    "output": "/home/kay/workspace/get-next-line/obj/get_next_line_utils.o"
+    "directory": "/home/kfreyer/workspace/get-next-line",
+    "file": "/home/kfreyer/workspace/get-next-line/src/get_next_line_utils.c",
+    "output": "/home/kfreyer/workspace/get-next-line/obj/get_next_line_utils.o"
   },
   {
     "arguments": [
@@ -53,8 +53,8 @@
       "your_echo",
       "./example/main.c"
     ],
-    "directory": "/home/kay/workspace/get-next-line",
-    "file": "/home/kay/workspace/get-next-line/example/main.c",
-    "output": "/home/kay/workspace/get-next-line/your_echo"
+    "directory": "/home/kfreyer/workspace/get-next-line",
+    "file": "/home/kfreyer/workspace/get-next-line/example/main.c",
+    "output": "/home/kfreyer/workspace/get-next-line/your_echo"
   }
 ]

@@ -13,7 +13,7 @@ BUFFER_SIZE = 16
 
 CXX := g++
 FSANITIZE := -fsanitize=address
-GTEST := -lgtest -lgtest_main -pthread #for googletests
+GTEST := -Lgtest -lgtest -lgtest_main -pthread #for googletests
 
 SRC_DIR := src
 OBJ_DIR := obj
