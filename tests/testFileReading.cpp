@@ -16,10 +16,10 @@ INSTANTIATE_TEST_SUITE_P(
 	ReadingFileTests,
 	ReadingFileTest,
 	testing::Values(
-		// ReadingFileTestParams{"./test_files/5", std::vector<std::string>{"line one\n", "line two with newline\n"}, 2},
-		// ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2}
-		// ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
-		// ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
+		ReadingFileTestParams{"./test_files/5", std::vector<std::string>{"line one\n", "line two with newline\n"}, 2},
+		ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
+		ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
+		ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
 		ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
 		ReadingFileTestParams{"./test_files/nl", std::vector<std::string>{"\n", ""}, 1},
 		ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
@@ -55,7 +55,7 @@ TEST_P(ReadingFileTest, VariousContents) {
 	free(got);
 
 	EXPECT_EQ(want_times_loop, got_times_loop);
-	// close(fd);
+	close(fd);
 }
 
 

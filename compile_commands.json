@@ -1,0 +1,60 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-D",
+      "BUFFER_SIZE=16",
+      "-Iincludes",
+      "-c",
+      "-o",
+      "obj/get_next_line.o",
+      "src/get_next_line.c"
+    ],
+    "directory": "/home/kay/workspace/get-next-line",
+    "file": "/home/kay/workspace/get-next-line/src/get_next_line.c",
+    "output": "/home/kay/workspace/get-next-line/obj/get_next_line.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-D",
+      "BUFFER_SIZE=16",
+      "-Iincludes",
+      "-c",
+      "-o",
+      "obj/get_next_line_utils.o",
+      "src/get_next_line_utils.c"
+    ],
+    "directory": "/home/kay/workspace/get-next-line",
+    "file": "/home/kay/workspace/get-next-line/src/get_next_line_utils.c",
+    "output": "/home/kay/workspace/get-next-line/obj/get_next_line_utils.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-g",
+      "-Wall",
+      "-Werror",
+      "-Wextra",
+      "-fsanitize=address",
+      "-D",
+      "BUFFER_SIZE=16",
+      "obj/get_next_line.o",
+      "obj/get_next_line_utils.o",
+      "-Iincludes",
+      "-o",
+      "your_echo",
+      "./example/main.c"
+    ],
+    "directory": "/home/kay/workspace/get-next-line",
+    "file": "/home/kay/workspace/get-next-line/example/main.c",
+    "output": "/home/kay/workspace/get-next-line/your_echo"
+  }
+]
