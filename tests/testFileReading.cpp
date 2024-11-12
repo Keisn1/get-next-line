@@ -16,25 +16,28 @@ INSTANTIATE_TEST_SUITE_P(
 	ReadingFileTests,
 	ReadingFileTest,
 	testing::Values(
-		ReadingFileTestParams{"./test_files/5", std::vector<std::string>{"line one\n", "line two with newline\n"}, 2},
-		ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
-		ReadingFileTestParams{"./test_files/16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
-		ReadingFileTestParams{"./test_files/3", std::vector<std::string>{"with newline at the end\n"}, 1},
-		ReadingFileTestParams{"./test_files/2", std::vector<std::string>{"other line"}, 1},
-		ReadingFileTestParams{"./test_files/nl", std::vector<std::string>{"\n", ""}, 1},
-		ReadingFileTestParams{"./test_files/4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
-		ReadingFileTestParams{"./test_files/1", std::vector<std::string>{"a line"}, 1},
-		ReadingFileTestParams{"./test_files/0", std::vector<std::string>{}, 0}
+		ReadingFileTestParams{"5", std::vector<std::string>{"line one\n", "line two with newline\n"}, 2},
+		ReadingFileTestParams{"4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
+		ReadingFileTestParams{"16charLine", std::vector<std::string>{"161616161616161\n"}, 1},
+		ReadingFileTestParams{"3", std::vector<std::string>{"with newline at the end\n"}, 1},
+		ReadingFileTestParams{"2", std::vector<std::string>{"other line"}, 1},
+		ReadingFileTestParams{"nl", std::vector<std::string>{"\n", ""}, 1},
+		ReadingFileTestParams{"4", std::vector<std::string>{"line one\n", "line two wo newline"}, 2},
+		ReadingFileTestParams{"1", std::vector<std::string>{"a line"}, 1},
+		ReadingFileTestParams{"0", std::vector<std::string>{}, 0}
 		)
 );
 
 TEST_P(ReadingFileTest, VariousContents) {
 	auto param = GetParam();
 	int want_times_loop = param.want_times_loop;
-	std::string filename = param.testfile;
+
+	const std::string testDataDir = TEST_DATA_DIR;
+	std::string filename = testDataDir + param.testfile;
 	std::vector<std::string> want_strs = param.want_strs;
 
 	int fd = open(filename.c_str(), O_RDONLY);
+	ASSERT_NE(-1, fd);
 
 	char* got = get_next_line(fd);
 	if (want_strs.size())
