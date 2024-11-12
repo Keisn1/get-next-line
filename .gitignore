@@ -1,3 +1,5 @@
 *.o
 /run_test
 /your_echo
+/.cache/
+/build/
