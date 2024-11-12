@@ -8,11 +8,10 @@ CC := cc
 CFLAGS := -Wall -Werror -Wextra
 INCLUDES := -Iincludes
 
-BUFFER_FLAG = -D BUFFER_SIZE=
-BUFFER_SIZE = 16
-
 CXX := g++
 FSANITIZE := -fsanitize=address
+
+BUFFER_SIZE := 16
 
 SRC_DIR := src
 OBJ_DIR := obj
@@ -41,12 +40,17 @@ fclean: clean
 
 re: fclean all
 
-test: build/Makefile
-	- ./build/run_tests
+test:
+	- cmake -S . -B build -DBUFFER_SIZE=$(BUFFER_SIZE)
+	- cmake --build build
+	- cd build && ctest -V
 
-build/Makefile: CMakeLists.txt $(shell find src -name '*.c') $(shell find tests -name '*.cpp' -o -name '*.cc')
-	cmake -S . -B build
-	cmake --build build
+test_all:
+	- cmake -S . -B build
+	- cmake --build build
+	- cd build && ctest -V
+
+# build/Makefile: CMakeLists.txt $(shell find src -name '*.c') $(shell find tests -name '*.cpp' -o -name '*.cc')
 
 norm:
 	norminette -R CheckForbiddenSourceHeader -R CheckDefine
