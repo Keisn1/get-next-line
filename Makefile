@@ -11,6 +11,7 @@ INCLUDES := -Iincludes
 CXX := g++
 FSANITIZE := -fsanitize=address
 
+BUFFER_FLAG := -DBUFFER_SIZE
 BUFFER_SIZE := 16
 
 SRC_DIR := src
@@ -36,6 +37,7 @@ clean:
 	rm -f $(OBJ_FILES)
 
 fclean: clean
+	rm -rf build
 	rm -f $(NAME)
 
 re: fclean all
@@ -45,7 +47,7 @@ test:
 	- cmake --build build
 	- cd build && ctest -V
 
-test_all:
+test_all: fclean
 	- cmake -S . -B build
 	- cmake --build build
 	- cd build && ctest -V
