@@ -9,4 +9,4 @@
                                        "README.org")
                                     (org-pandoc-export-to-gfm)))
                                 nil t))))
- (nil . ((org-directory . "/home/kfreyer/workspace/libft/org-files/"))))
+ )

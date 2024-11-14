@@ -9,156 +9,99 @@
 
 # Table of contents <span class="tag" data-tag-name="TOC"><span class="smallcaps">TOC</span></span>
 
-  - [get\_next\_line](#get_next_line)
-      - [prototype](#prototype)
-      - [return value](#return-value)
-      - [behavior](#behavior)
-      - [undefined behavior](#undefined-behavior)
-      - [not allowed - lseek and global
-        variables](#not-allowed---lseek-and-global-variables)
-  - [static variables](#static-variables)
-      - [what are static variables in
-        c?](#what-are-static-variables-in-c)
-      - [what are they used for in this
-        project](#what-are-they-used-for-in-this-project)
-  - [file descriptor](#file-descriptor)
+  - [What is get\_next\_line?](#what-is-get_next_line)
+  - [What are static variables?](#what-are-static-variables)
+  - [What is a file descriptor? (open() system
+    call)](#what-is-a-file-descriptor-open-system-call)
       - [file status flags (some)](#file-status-flags-some)
-  - [read](#read)
-      - [return value](#return-value-1)
-      - [nbr of bytes smaller then nbr of bytes
-        requested](#nbr-of-bytes-smaller-then-nbr-of-bytes-requested)
-      - [Buffer size and count](#buffer-size-and-count)
-  - [Compilation](#compilation)
-      - [Flag: -D BUFFER\_SIZE=xx](#flag--d-buffer_sizexx)
-      - [what is the D flag](#what-is-the-d-flag)
-      - [compilation](#compilation-1)
-  - [Testing](#testing)
-      - [TODO](#todo)
+  - [What is the read() system-call?](#what-is-the-read-system-call)
+      - [Buffer size and count (from
+        man)](#buffer-size-and-count-from-man)
 
-# get\_next\_line
+# What is get\_next\_line?
 
-## prototype
+The **get\_next\_line** project is part a project inside the **Core
+Curriculum of 42school** which teaches about a variety of concepts in
+low-level programming. To succeed in this project, students need to
+acquire knowledge on *file descriptors* and *static variables* as well
+as developing proficiency in handling *memory* and
+*preprocessor-directives* as well as the *read()* and *open()* system
+call.
 
-`int get_next_line(int fd, char **line);`
+The **task** of the project is to write a function that accepts a *file
+descriptor* as input and returns a string containing the contents of the
+corresponding text file. Each time the function is called, it should
+return exactly one line from the file, progressing to the next line with
+each subsequent call. It shall also be possible to read from `stdin`.
 
-  - fd: file descriptor for reading
-  - line: value of what has been read
+``` c
+char* get_next_line(int fd);
+```
 
-## return value
+Since the length of the line is unknown in advance, we need to set a
+`BUFFER_SIZE` beforehand to determine how much data to read from the
+file descriptor each time. The `BUFFER_SIZE` may vary, and we should be
+able to configure its size during compilation.
 
-|     |                      |
-| --- | -------------------- |
-| 1   | A line has been read |
-| 0   | EOF has been reached |
-| \-1 | An error occured     |
+``` shell
+-D BUFFER_SIZE=n
+```
 
-## behavior
+Furthermore, the project sets some constraints. We are not allowed to
+use any `seek` function to reposition our read head to the spot just
+after a newline. Therefore, we need to manage any excess data by
+manipulating the memory where we store our string. Moreover, we cannot
+use global variables, and since we need to retain what was read the last
+time the function was called, we must store that information in a
+`static` variable.
 
-  - returns a line read from a file descriptor, without the newline
-  - read as little as possible
-  - newline marks the end of a read: return the current line
+# What are static variables?
 
-## undefined behavior
+*Static variables* are declared inside functions, and their values
+remain consistent between function calls. When you declare a *static
+variable* within a function, any changes made to it will persist across
+subsequent calls to that function. This enables the creation of stateful
+functions. Static variables are declared using the `static` keyword.
 
-  - same file descriptor switches to a different file before EOF, before
-    EOF has been reached for the first fd
-  - reading from a binary file
-      - can be made coherent, if you wish to
+``` c
+#include <stdio.h>
 
-## not allowed - lseek and global variables
+void counter() {
+    static int count = 0;  // Static local variable
+    count++;
+    printf("Count: %d\n", count);
+}
 
-lseek is not allowed global variables are not allowed
+int main() {
+    counter();  // Output: Count: 1
+    counter();  // Output: Count: 2
+    counter();  // Output: Count: 3
+    return 0;
+}
+```
 
-# static variables
+# What is a file descriptor? (open() system call)
 
-## what are static variables in c?
+A *file descriptor* is a small, nonnegative integer that serves as a
+reference to an open file description and is unaffected by changes to
+the file's pathname.
 
-In C, static variables are variables that maintain their value between
-function calls and have a scope that is either limited to the file or
-the block in which they are declared. They are declared using the
-`static` keyword. There are two primary contexts in which static
-variables can be used:
+It acts as an index to an entry in the process's table of open *file
+descriptors* and is the return value from the `open` system call.
 
-1.  **Static Local Variables**:
-      - Declared inside a function.
-    
-      - Retain their value between function calls.
-    
-      - Scope is limited to the function in which they are declared.
-        
-        ``` c
-        #include <stdio.h>
-        
-        void counter() {
-            static int count = 0;  // Static local variable
-            count++;
-            printf("Count: %d\n", count);
-        }
-        
-        int main() {
-            counter();  // Output: Count: 1
-            counter();  // Output: Count: 2
-            counter();  // Output: Count: 3
-            return 0;
-        }
-        ```
-2.  **Static Global Variables**:
-      - Declared outside of all functions, typically at the top of a
-        file.
-    
-      - Accessible only within the file where they are declared.
-    
-      - Can be used to restrict the visibility of a variable to the file
-        scope, which is useful for creating private data that should not
-        be accessible from other files.
-        
-        ``` c
-        // File1.c
-        static int counter = 0;  // Static global variable
-        void incrementCounter() {
-         counter++;
-        }
-        int getCounter() {
-         return counter;
-        }
-        ```
-        
-        ``` c
-        // File2.c
-        #include <stdio.h>
-        
-        extern void incrementCounter();
-        extern int getCounter();
-        
-        int main() {
-         incrementCounter();
-         incrementCounter();
-         printf("Counter: %d\n", getCounter());  // Output: Counter: 2
-         return 0;
-        }
-        ```
-    In summary, static variables in C help manage data persistence and
-    visibility, making them useful for stateful operations within
-    functions or for restricting global variable access to a single
-    file.
+While using the file descriptor in further calls like `read()`, the
+[file
+position](https://www.gnu.org/software/libc/manual/html_node/File-Position.html)
+is being tracked.
 
-## what are they used for in this project
+File descriptors are utilized in various system calls such as `read()`,
+`write`, `lseek`, and `fcntl`.
 
-  - they are probably used for the filedescriptor
+They record important information like the *file offset* and *file
+status flags*.
 
-# file descriptor
-
-  - small, nonnegative integer
-  - reference to an open file description
-      - uneffected if pathname is changed
-  - index to an entry in the process's table of open file descriptors
-  - return value of **open**
-  - used in system calls like: **read**, **write**, **lseek**, **fcntl**
-  - records **file offset** and **file status flags**
-  - The argument flags must include one of the following access modes:
-      - O\_RDONLY
-      - O\_WRONLY
-      - O\_RDWR
+When opening a file, the argument flags must include one of the access
+modes: `O_RDONLY`, `O_WRONLY`, or `O_RDWR`.
 
 ## file status flags (some)
 
@@ -201,79 +144,44 @@ fail if the file already exists
 
 Truncate the file to zero length if it already exists
 
-# read
+# What is the read() system-call?
 
-`ssize_t read(int fd, void buf[.count], size_t count);`
-
-## return value
-
-  - success
-      - number of bytes read is returned
-      - file position is advanced by this number
-      - 0 means end of file
-  - error
-      - `-1` is returned
-      - `errno` set to indicate the error
-      - unspecified if file position changed
-
-## nbr of bytes smaller then nbr of bytes requested
-
-  - not an error
-  - maybe fewer bytes available or interrupted by signal
-
-## Buffer size and count
-
-  - If count is zero, read() may detect the errors described below.
-
-  - In the absence of any errors, or if read() does not check for
-    errors, a read() with a count of 0 returns zero and has no other
-    effects.
-
-  - According to POSIX.1, if count is greater than SSIZE\_MAX, the
-    result is **implementation-defined**; see NOTES for the upper limit
-    on Linux.
-
-  - on my system, the `ssize_type` is defined via `__ssize_t`, which in
-    turn is defined as `__SWORD_TYPE` which is a `long int`
-    
-    ``` c
-    # define __SWORD_TYPE     long int
-    #define __SSIZE_T_TYPE        __SWORD_TYPE
-    __STD_TYPE __SSIZE_T_TYPE __ssize_t; /* Type of a byte count, or error.  */
-    typedef __ssize_t ssize_t;
-    ```
-
-# Compilation
-
-## <span class="todo TODO">TODO</span> Flag: -D BUFFER\_SIZE=xx
-
-  - used for the buffer size for the read calls
-  - will be modified and played around with
-  - \[ \] buffer = 1
-  - \[ \] buffer = 9999
-  - \[ \] buffer = 10000000
-
-## what is the D flag
-
-The `-D` flag in C compilation is used to define a macro during
-compilation.
-
-## compilation
-
-  - with gcc apparently
-
-<!-- end list -->
-
-``` shell
-gcc -Wall -Wextra -Werror -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c
+``` c
+ssize_t read(int fd, void buf[.count], size_t count);
 ```
 
-# Testing
+The `read` function reads up to `count` bytes from the *file descriptor*
+`fd` and saves them into the buffer `buf`.
 
-## <span class="todo TODO">TODO</span> 
+On success, the return value holds the number of bytes that have been
+read and the *file position* is being advanced by that number.
 
-  - \[ \] Reading from a file
-  - \[ \] Reading from stdin
-  - \[ \] Reading from redirection
-  - \[ \] sending a newline to standard-output
-  - \[ \] CTRL-D
+A return value of `0` indicates the end of the file. A return value of
+`-1` indicates an error and `errno` is set for further information on
+the error.
+
+On error, the change of the file position is unspecified.
+
+It may appear that fewer bytes are read than were requested. This is not
+an error. It might just be, that a the process was interrupted or it
+reached the end of the file.
+
+## Buffer size and count (from man)
+
+If `count` is zero, `read()` may detect the errors described below.
+
+In the absence of any errors, or if `read()` does not check for errors,
+a `read()` with a count of 0 returns zero and has no other effects.
+
+According to POSIX.1, if `count` is greater than `SSIZE_MAX`, the result
+is **implementation-defined**; see NOTES for the upper limit on Linux.
+
+On my system, the `ssize_type` was defined via `__ssize_t`, which in
+turn is defined as `__SWORD_TYPE` which is a `long int`
+
+``` c
+# define __SWORD_TYPE           long int
+#define __SSIZE_T_TYPE          __SWORD_TYPE
+__STD_TYPE __SSIZE_T_TYPE __ssize_t; /* Type of a byte count, or error.  */
+typedef __ssize_t ssize_t;
+```
