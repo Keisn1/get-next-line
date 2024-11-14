@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "test_get_next_line.hpp"
 
 int main(int argc, char **argv) {
 	::testing::InitGoogleTest(&argc, argv);

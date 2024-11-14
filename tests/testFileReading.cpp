@@ -1,7 +1,4 @@
-#include "get_next_line.h"
-#include <cstdio>
-#include <fcntl.h>
-#include <gtest/gtest.h>
+#include "test_get_next_line.hpp"
 
 
 struct ReadingFileTestParams {

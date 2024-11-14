@@ -1,5 +1,4 @@
-#include "get_next_line.h"
-#include <gtest/gtest.h>
+#include "test_get_next_line.hpp"
 
 class ReadingStdinTest : public ::testing::Test {
 protected:
