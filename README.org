@@ -21,7 +21,7 @@
   - [[#buffer-size-and-count-from-man][Buffer size and count (from man)]]
 
 * What is get_next_line?
-The *get_next_line* project is part a project inside the *Core Curriculum of 42school* which teaches about a variety of concepts in low-level programming. To succeed in this project, students need to acquire knowledge on /file descriptors/ and /static variables/ as well as developing proficiency in handling /memory/ and /preprocessor-directives/ as well as the /read()/ and /open()/ system call.
+The *get_next_line* project is part of the *Core Curriculum of 42school* which teaches about a variety of concepts in low-level programming. To succeed in this project, students need to acquire knowledge on /file descriptors/ and /static variables/ as well as developing proficiency in handling /memory/ and /preprocessor-directives/ as well as the /read()/ and /open()/ system call.
 
 The *task* of the project is to write a function that accepts a /file descriptor/ as input and returns a string containing the contents of the corresponding text file. Each time the function is called, it should return exactly one line from the file, progressing to the next line with each subsequent call. It shall also be possible to read from =stdin=.
 #+begin_src c

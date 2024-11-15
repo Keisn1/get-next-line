@@ -20,11 +20,11 @@
 
 # What is get\_next\_line?
 
-The **get\_next\_line** project is part a project inside the **Core
-Curriculum of 42school** which teaches about a variety of concepts in
-low-level programming. To succeed in this project, students need to
-acquire knowledge on *file descriptors* and *static variables* as well
-as developing proficiency in handling *memory* and
+The **get\_next\_line** project is part of the **Core Curriculum of
+42school** which teaches about a variety of concepts in low-level
+programming. To succeed in this project, students need to acquire
+knowledge on *file descriptors* and *static variables* as well as
+developing proficiency in handling *memory* and
 *preprocessor-directives* as well as the *read()* and *open()* system
 call.
 
